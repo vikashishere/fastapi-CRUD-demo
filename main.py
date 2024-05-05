@@ -1,5 +1,6 @@
 # do <pip install "fastapi[all]"> to install all the required dependencies
 from fastapi import FastAPI
+from utils import NewEmployee
 
 app = FastAPI(
     title="CRUD Operations",
@@ -27,6 +28,15 @@ def get_employee(emp_id: int):
     if emp_id not in employees:
         return f"No employee exist with ID: {emp_id}"
     return employees[emp_id]
+
+@app.post("/add-employee")
+def add_employee(emp: NewEmployee):
+    if not employees:
+        new_id = 1
+    else:
+        new_id = max(employees.keys()) + 1
+    NewEmployee[new_id] = emp
+    return employees[new_id]
 
 if __name__ == "__main__":
     import uvicorn
